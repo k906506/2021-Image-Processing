@@ -1,14 +1,13 @@
 import numpy as np
 import cv2
 import time
-import math
 
 # library add
 import os
 import sys
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-from my_library.padding import my_padding
+from padding import my_padding
 
 
 def my_get_Gaussian2D_mask(msize, sigma=1):
@@ -61,7 +60,7 @@ def my_filtering(src, mask, pad_type='zero'):
 
     dst = np.zeros((h, w))
 
-    '''
+    ''' 시간측정용
     for row in range(h):
         for col in range(w):
             sum = 0
@@ -82,7 +81,7 @@ def my_filtering(src, mask, pad_type='zero'):
 
 if __name__ == '__main__':
     src = cv2.imread('Lena.png', cv2.IMREAD_GRAYSCALE)
-    mask_size = 5
+    mask_size = 11
     gaus2D = my_get_Gaussian2D_mask(mask_size, sigma=1)
     gaus1D = my_get_Gaussian1D_mask(mask_size, sigma=1)
 
@@ -105,12 +104,7 @@ if __name__ == '__main__':
     dst_gaus2D = np.clip(dst_gaus2D + 0.5, 0, 255)
     dst_gaus2D = dst_gaus2D.astype(np.uint8)
 
-    cv2.imshow('original', src)
-    cv2.imshow('1D gaussian img', dst_gaus1D)
-    cv2.imshow('2D gaussian img', dst_gaus2D)
-    cv2.waitKey()
-    cv2.destroyAllWindows()
-
+    '''
     (h, w) = dst_gaus1D.shape
     count = 0
     print('error test')
@@ -118,5 +112,11 @@ if __name__ == '__main__':
         for j in range(w):
             if abs(dst_gaus1D[i, j] - dst_gaus2D[i, j]) > 0:
                 count += 1
-                if count > 0:
-                    print(count, i, j, dst_gaus1D[i, j], dst_gaus2D[i, j])
+                print(count, i, j, dst_gaus1D[i, j], dst_gaus2D[i, j])
+    '''
+
+    cv2.imshow('original', src)
+    cv2.imshow('1D gaussian img', dst_gaus1D)
+    cv2.imshow('2D gaussian img', dst_gaus2D)
+    cv2.waitKey()
+    cv2.destroyAllWindows()
