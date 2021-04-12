@@ -1,4 +1,6 @@
-def my_padding(src, pad_shape, pad_type='zero padding'):
+import numpy as np
+
+def my_padding(src, pad_shape, pad_type='zero'):
     (h, w) = src.shape  # 그림의 사이즈
     (p_h, p_w) = pad_shape  # 늘리고자하는 사이즈
     pad_img = np.zeros((h+2*p_h, w+2*p_w))
