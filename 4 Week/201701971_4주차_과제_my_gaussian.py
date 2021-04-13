@@ -35,7 +35,7 @@ def my_get_Gaussian1D_mask(msize, sigma=1):
     x = np.reshape(x, (msize, 1))
 
     # 1차 gaussian mask 생성
-    gaus1D = (np.exp(-(x**2)/(2*sigma**2))) / (np.abs(2*np.pi)*sigma)
+    gaus1D = (np.exp(-(x**2)/(2*sigma**2))) / (np.sqrt(2*np.pi)*sigma)
 
     # mask의 총 합 = 1
     gaus1D /= np.sum(gaus1D)
@@ -43,7 +43,7 @@ def my_get_Gaussian1D_mask(msize, sigma=1):
     return gaus1D
 
 
-def my_filtering(src, mask, pad_type='zero'):
+def my_filtering(src, mask, pad_type='repetition'):
     (h, w) = src.shape
     # mask의 크기
     (m_h, m_w) = mask.shape
@@ -70,9 +70,9 @@ def my_filtering(src, mask, pad_type='zero'):
             dst[row, col] = sum
     '''
 
-    for i in range(rangeH, h - rangeH):
-        for j in range(rangeW, w - rangeW):
-            squareValue = src[i - rangeH:i + rangeH + 1, j - rangeW:j + rangeW + 1]
+    for i in range(h):
+        for j in range(w):
+            squareValue = pad_img[i:i+m_h, j:j+m_w]
             # 따로 선언하지 않고 위의 코드처럼 진행해도 OK.
             dst[i][j] = np.sum(squareValue * mask)
 
@@ -81,7 +81,7 @@ def my_filtering(src, mask, pad_type='zero'):
 
 if __name__ == '__main__':
     src = cv2.imread('Lena.png', cv2.IMREAD_GRAYSCALE)
-    mask_size = 11
+    mask_size = 5
     gaus2D = my_get_Gaussian2D_mask(mask_size, sigma=1)
     gaus1D = my_get_Gaussian1D_mask(mask_size, sigma=1)
 
