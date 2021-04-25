@@ -20,10 +20,12 @@ def apply_lowNhigh_pass_filter(src, fsize, sigma=1):
     y, x = np.mgrid[-int(fsize / 2):int(fsize / 2) + 1, -int(fsize / 2):int(fsize / 2) + 1]
 
     # 2차 gaussian mask의 x에 대한 미분 -> (x*(np.exp(-(x ** 2 + y ** 2) / (2 * sigma ** 2))))/sigma**2의 x에 대한 미분
-    DoG_x = -x * (np.exp(-(x ** 2 + y ** 2) / (2 * sigma ** 2)))
+    DoG_x = (-x / sigma ** 2) * (np.exp(-(x ** 2 + y ** 2) / (2 * sigma ** 2)))
+    DoG_x = DoG_x - (DoG_x.sum() / fsize ** 2)
 
     # 2차 gaussian mask의 y에 대한 미분 -> (x*(np.exp(-(x ** 2 + y ** 2) / (2 * sigma ** 2))))/sigma**2의 y에 대한 미분
-    DoG_y = -y * (np.exp(-(x ** 2 + y ** 2) / (2 * sigma ** 2)))
+    DoG_y = (-y / sigma ** 2) * (np.exp(-(x ** 2 + y ** 2) / (2 * sigma ** 2)))
+    DoG_y = DoG_y - (DoG_y.sum() / fsize ** 2)
 
     Ix = my_filtering(src, DoG_x, 'repetition')
     Iy = my_filtering(src, DoG_y, 'repetition')
@@ -112,7 +114,13 @@ def double_thresholding(src):
     # double_thresholding 완성                            #
     # dst     : double threshold 실행 결과 이미지           #
     ######################################################
-  #  dst = ???
+    for i in range(h):
+        for j in range(w):
+            if dst[i][j] >= int(high_threshold_value):
+                dst[i][j] = 255
+            elif dst[i][j] < int(low_threshold_value):
+                dst[i][j] = 0
+
     return dst
 
 def my_canny_edge_detection(src, fsize=3, sigma=1):
@@ -156,6 +164,7 @@ def my_canny_edge_detection(src, fsize=3, sigma=1):
 
     # double thresholding 수행
     dst = double_thresholding(largest_magnitude)
+    cv2.imwrite("after thresholding.png", dst)
     return dst
 
 def main():
