@@ -134,7 +134,7 @@ def double_thresholding(src):
             if dst[i][j] == 255:
                 mid = deque()
                 mid.append((i, j))
-                while mid:
+                while mid: # DFS 진행
                     x, y = mid.popleft()
                     dx = [-1, -1, -1, 0, 0, 1, 1, 1]
                     dy = [-1, 0, 1, -1, 1, -1, 0, 1]
