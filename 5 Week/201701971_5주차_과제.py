@@ -13,10 +13,10 @@ def get_DoG_filter(fsize, sigma=1):
     ###################################################
     y, x = np.mgrid[-int(fsize / 2):int(fsize / 2) + 1, -int(fsize / 2):int(fsize / 2) + 1]
 
-    # 2차 gaussian mask의 x에 대한 미분 -> (x*(np.exp(-(x ** 2 + y ** 2) / (2 * sigma ** 2))))/sigma**2의 x에 대한 미분
+    # 2차 gaussian mask의 x에 대한 미분 -> np.exp(-(x ** 2 + y ** 2) / (2 * sigma ** 2))/sigma**2의 x에 대한 미분
     DoG_x = (-x / sigma ** 2) * (np.exp(-(x ** 2 + y ** 2) / (2 * sigma ** 2)))
 
-    # 2차 gaussian mask의 y에 대한 미분 -> (x*(np.exp(-(x ** 2 + y ** 2) / (2 * sigma ** 2))))/sigma**2의 y에 대한 미분
+    # 2차 gaussian mask의 y에 대한 미분 -> np.exp(-(x ** 2 + y ** 2) / (2 * sigma ** 2))/sigma**2의 y에 대한 미분
     DoG_y = (-y / sigma ** 2) * (np.exp(-(x ** 2 + y ** 2) / (2 * sigma ** 2)))
 
     return DoG_x, DoG_y
