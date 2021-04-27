@@ -134,7 +134,7 @@ def double_thresholding(src):
             if dst[i][j] == 255:
                 mid = deque()
                 mid.append((i, j))
-                while mid: # DFS 진행
+                while mid: # BFS 진행
                     x, y = mid.popleft()
                     dx = [-1, -1, -1, 0, 0, 1, 1, 1]
                     dy = [-1, 0, 1, -1, 1, -1, 0, 1]
@@ -178,7 +178,6 @@ def my_canny_edge_detection(src, fsize=3, sigma=1):
 
     # magnitude 시각화를 위해 임시로 magnitude_t 만들기
     magnitude_t = magnitude
-    cv2.imwrite("magnitude.png", magnitude_t)
     magnitude_t = magnitude_t / magnitude_t.max()
     cv2.imshow("magnitude", magnitude_t)
     cv2.waitKey()
