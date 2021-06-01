@@ -31,13 +31,15 @@ def forward(src, M, fit):
                 dst_col = P_dst[0][0]
                 dst_row = P_dst[1][0]
 
+                # dst_col_right = dst_col_left + 1
                 dst_col_right = int(np.ceil(dst_col))
                 dst_col_left = int(dst_col)
 
+                # dst_col_bottom = dst_col_top + 1
                 dst_row_bottom = int(np.ceil(dst_row))
                 dst_row_top = int(dst_row)
 
-                if 0 <= dst_row_bottom < h and 0 <= dst_col_right < w:
+                if 0 <= dst_row_bottom < h and 0 <= dst_col_right < w: # 범위 이내인 경우
                     dst[dst_row_top, dst_col_left] += src[row, col]
                     N[dst_row_top, dst_col_left] += 1
 
@@ -57,7 +59,7 @@ def forward(src, M, fit):
     dst = dst.astype(np.uint8)
     return dst
 
-def backward(src, M, fit=False):
+def backward(src, M, fit):
     #####################################################
     # TODO                                              #
     # backward 완성                                      #
@@ -77,15 +79,21 @@ def backward(src, M, fit=False):
 
     for row in range(h):
         for col in range(w):
-            P_dst = np.array([[col], [row], [1]])
+            P_dst = np.array([
+                [col],
+                [row],
+                [1]
+            ])
 
             P = np.dot(M_inv, P_dst)
-            src_col = P[0, 0]
-            src_row = P[1, 0]
+            src_col = P[0][0]
+            src_row = P[1][0]
 
+            # dst_col_right = dst_col_left + 1
             src_col_right = int(np.ceil(src_col))
             src_col_left = int(src_col)
 
+            # dst_col_bottom = dst_col_top + 1
             src_row_bottom = int(np.ceil(src_row))
             src_row_top = int(src_row)
 
@@ -136,7 +144,7 @@ def main():
     # forward
     dst_for = forward(src, M, fit)
     dst_for2 = forward(dst_for, np.linalg.inv(M), fit)
-    # dst_for3 = forward(dst_for, np.linalg.inv(M), True)
+    # dst_for3 = forward(dst_for, np.linalg.inv(np.linalg.inv(M)), fit)
 
 
     # backward
