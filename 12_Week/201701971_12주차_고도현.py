@@ -78,8 +78,8 @@ def get_threshold(src, type='rice'):
         assert np.abs((q1 * m1 + q2 * m2) - mg) < 1E-6
 
         # 각각 한 줄로 작성하세요 (varw, varb)
-        varw = q1*var1 + q2+var2
-        varb = q1*q2*(np.square(m2-m2))
+        varw = q1 * var1 + q2 * var2
+        varb = q1 * q2 * (np.square(m1-m2))
 
         k_opt_warw.append(varw)
         k_opt_warb.append(varb)
