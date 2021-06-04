@@ -131,7 +131,7 @@ def meat_main():
 
     for i in range(h):
         for j in range(w):
-            if dst[i][j] >= val:  # 임계점보다 크거나 경우
+            if dst[i][j] > val:  # 임계점보다 큰 경우
                 final[i][j] = 255  # 최댓값(흰색)으로 변경
 
     print('< get_threshold >')
@@ -144,7 +144,7 @@ def meat_main():
 
 
 def main():
-    # rice_main()
+    rice_main()
     meat_main()
 
 
